@@ -1,0 +1,777 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Mark Gan — Portfolio</title>
+  <style>
+    /* ── Reset & base ── */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --bg:        #f8f7f4;
+      --surface:   #ffffff;
+      --border:    #e8e4de;
+      --text:      #1a1a1a;
+      --muted:     #6b6860;
+      --accent:    #3d6b4f;
+      --accent-lt: #edf4f0;
+      --accent-2:  #c8834a;
+      --radius:    14px;
+      --shadow:    0 2px 16px rgba(0,0,0,.07);
+      --shadow-lg: 0 8px 40px rgba(0,0,0,.10);
+      --font:      'Inter', system-ui, -apple-system, sans-serif;
+    }
+    html { scroll-behavior: smooth; }
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: var(--font);
+      font-size: 16px;
+      line-height: 1.65;
+      min-height: 100vh;
+    }
+
+    /* ── Typography ── */
+    h1 { font-size: clamp(2rem, 5vw, 3.2rem); font-weight: 700; letter-spacing: -.03em; line-height: 1.1; }
+    h2 { font-size: clamp(1.4rem, 3vw, 1.9rem); font-weight: 600; letter-spacing: -.02em; margin-bottom: .5rem; }
+    h3 { font-size: 1.05rem; font-weight: 600; }
+    p  { color: var(--muted); }
+    a  { color: var(--accent); text-decoration: none; }
+    a:hover { text-decoration: underline; }
+
+    /* ── Nav ── */
+    nav {
+      position: sticky; top: 0; z-index: 100;
+      background: rgba(248,247,244,.88);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border);
+      padding: .85rem 1.5rem;
+      display: flex; align-items: center; justify-content: space-between;
+    }
+    .nav-logo { font-weight: 700; font-size: 1.05rem; color: var(--text); }
+    .nav-links { display: flex; gap: 1.8rem; }
+    .nav-links a { font-size: .9rem; font-weight: 500; color: var(--muted); transition: color .2s; }
+    .nav-links a:hover { color: var(--accent); text-decoration: none; }
+
+    /* ── Section wrapper ── */
+    .section { padding: 5rem 1.5rem; max-width: 900px; margin: 0 auto; }
+
+    /* ── Hero ── */
+    #hero {
+      min-height: 90vh;
+      display: flex; align-items: center;
+      padding-top: 3rem; padding-bottom: 3rem;
+    }
+    .hero-inner {
+      display: flex;
+      align-items: center;
+      gap: 4rem;
+      width: 100%;
+    }
+    .hero-photo-wrap {
+      flex-shrink: 0;
+      width: 220px; height: 220px;
+      border-radius: 50%;
+      overflow: hidden;
+      border: 3px solid var(--border);
+      box-shadow: var(--shadow-lg);
+    }
+    .hero-photo-wrap img {
+      width: 100%; height: 100%;
+      object-fit: cover;
+      object-position: center top;
+      display: block;
+    }
+    .hero-text { flex: 1; }
+    .hero-badge {
+      display: inline-flex; align-items: center; gap: .4rem;
+      background: var(--accent-lt); color: var(--accent);
+      font-size: .78rem; font-weight: 600; letter-spacing: .06em;
+      text-transform: uppercase; padding: .3rem .75rem;
+      border-radius: 99px; margin-bottom: 1rem;
+    }
+    .hero-badge::before { content: '●'; font-size: .5rem; }
+    .hero-name { margin-bottom: .6rem; }
+    .hero-tagline {
+      font-size: clamp(1rem, 2.2vw, 1.2rem);
+      color: var(--muted); margin-bottom: 1.8rem;
+      max-width: 520px; line-height: 1.7;
+    }
+    .hero-ctas { display: flex; gap: .75rem; flex-wrap: wrap; }
+    .btn {
+      display: inline-flex; align-items: center; gap: .4rem;
+      padding: .65rem 1.3rem; border-radius: 99px;
+      font-size: .9rem; font-weight: 600; cursor: pointer;
+      transition: all .2s; border: none; text-decoration: none;
+    }
+    .btn-primary { background: var(--accent); color: #fff; }
+    .btn-primary:hover { background: #2e5239; text-decoration: none; transform: translateY(-1px); box-shadow: 0 4px 14px rgba(61,107,79,.3); }
+    .btn-outline { background: transparent; color: var(--text); border: 1.5px solid var(--border); }
+    .btn-outline:hover { border-color: var(--accent); color: var(--accent); text-decoration: none; }
+
+    /* ── Divider ── */
+    .divider { border: none; border-top: 1px solid var(--border); max-width: 900px; margin: 0 auto; }
+
+    /* ── About ── */
+    #about .about-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 2rem;
+      margin-top: 2rem;
+    }
+    .about-card {
+      background: var(--surface); border: 1px solid var(--border);
+      border-radius: var(--radius); padding: 1.5rem;
+      box-shadow: var(--shadow);
+    }
+    .about-card .icon { font-size: 1.6rem; margin-bottom: .6rem; }
+    .about-card h3 { margin-bottom: .3rem; }
+    .about-lead {
+      font-size: clamp(1rem, 2vw, 1.1rem);
+      color: var(--muted); line-height: 1.8; margin-bottom: 1.5rem;
+    }
+
+    /* ── Skills ── */
+    #skills .skills-wrap { display: flex; flex-wrap: wrap; gap: .6rem; margin-top: 1.5rem; }
+    .skill-chip {
+      background: var(--surface); border: 1px solid var(--border);
+      border-radius: 99px; padding: .35rem .9rem;
+      font-size: .85rem; font-weight: 500; color: var(--text);
+      box-shadow: var(--shadow);
+    }
+
+    /* ── Game section ── */
+    #game { padding-bottom: 6rem; }
+    .game-header { margin-bottom: 2rem; }
+    .game-header p { margin-top: .4rem; }
+    .game-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      padding: 2.5rem;
+      box-shadow: var(--shadow-lg);
+      max-width: 560px;
+      margin: 0 auto;
+    }
+
+    /* Score bar */
+    .score-bar {
+      display: flex; justify-content: space-between; align-items: center;
+      margin-bottom: 1.8rem;
+    }
+    .score-item { text-align: center; }
+    .score-label { font-size: .72rem; font-weight: 600; letter-spacing: .06em; text-transform: uppercase; color: var(--muted); }
+    .score-val { font-size: 1.5rem; font-weight: 700; color: var(--text); line-height: 1; }
+
+    /* Lives */
+    .lives { display: flex; gap: .3rem; justify-content: center; }
+    .life { font-size: 1.1rem; transition: all .3s; }
+    .life.lost { filter: grayscale(1); opacity: .3; }
+
+    /* Word display */
+    .word-display {
+      text-align: center;
+      margin: 1.5rem 0;
+    }
+    .scrambled-label { font-size: .72rem; font-weight: 600; letter-spacing: .08em; text-transform: uppercase; color: var(--muted); margin-bottom: .8rem; }
+    .scrambled-word {
+      font-size: clamp(2rem, 8vw, 3.2rem);
+      font-weight: 800;
+      letter-spacing: .15em;
+      color: var(--accent);
+      word-break: break-all;
+    }
+    .hint-row {
+      display: flex; justify-content: center; align-items: center; gap: .5rem;
+      margin-top: .6rem; min-height: 1.4rem;
+    }
+    .hint-text { font-size: .82rem; color: var(--accent-2); font-style: italic; }
+
+    /* Letter slots (visual unscramble) */
+    .letter-slots {
+      display: flex; justify-content: center; gap: .3rem;
+      margin: 1rem 0 1.5rem;
+      flex-wrap: wrap;
+    }
+    .slot {
+      width: 40px; height: 44px;
+      border-radius: 8px;
+      border: 2px solid var(--border);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.1rem; font-weight: 700;
+      text-transform: uppercase;
+      background: var(--bg);
+      color: transparent;
+      transition: all .15s;
+    }
+    .slot.filled { border-color: var(--accent); background: var(--accent-lt); color: var(--accent); }
+    .slot.correct { border-color: #3d6b4f; background: #c8e6d4; color: #1a4d2c; }
+    .slot.wrong   { border-color: #d94f4f; background: #fde8e8; color: #a83232; }
+
+    /* Input area */
+    .input-row {
+      display: flex; gap: .6rem; margin-bottom: 1rem;
+    }
+    .guess-input {
+      flex: 1;
+      padding: .75rem 1rem;
+      border: 1.5px solid var(--border);
+      border-radius: 10px;
+      font-size: 1rem;
+      font-family: var(--font);
+      background: var(--bg);
+      color: var(--text);
+      outline: none;
+      text-transform: uppercase;
+      letter-spacing: .08em;
+      transition: border-color .2s;
+    }
+    .guess-input:focus { border-color: var(--accent); }
+    .guess-input::placeholder { text-transform: none; letter-spacing: 0; color: #b0aca6; }
+    .btn-check {
+      background: var(--accent); color: #fff;
+      border: none; border-radius: 10px;
+      padding: .75rem 1.3rem;
+      font-size: .9rem; font-weight: 600;
+      cursor: pointer; transition: all .2s;
+      font-family: var(--font);
+    }
+    .btn-check:hover { background: #2e5239; transform: translateY(-1px); }
+    .btn-check:active { transform: translateY(0); }
+
+    /* Action row */
+    .action-row {
+      display: flex; gap: .6rem; flex-wrap: wrap;
+    }
+    .btn-skip, .btn-hint {
+      flex: 1; padding: .6rem .8rem;
+      border-radius: 10px;
+      font-size: .85rem; font-weight: 600;
+      cursor: pointer; transition: all .2s;
+      font-family: var(--font);
+    }
+    .btn-skip { background: var(--bg); border: 1.5px solid var(--border); color: var(--muted); }
+    .btn-skip:hover { border-color: var(--accent-2); color: var(--accent-2); }
+    .btn-hint { background: var(--accent-lt); border: 1.5px solid transparent; color: var(--accent); }
+    .btn-hint:hover { border-color: var(--accent); }
+    .btn-hint:disabled { opacity: .4; cursor: not-allowed; }
+
+    /* Feedback */
+    .feedback {
+      text-align: center; min-height: 1.5rem;
+      font-weight: 600; font-size: .95rem;
+      transition: all .3s; margin-top: .8rem;
+    }
+    .feedback.correct { color: var(--accent); }
+    .feedback.wrong   { color: #d94f4f; }
+
+    /* Progress bar */
+    .progress-wrap { margin-top: 1.5rem; }
+    .progress-label { font-size: .75rem; color: var(--muted); margin-bottom: .3rem; display: flex; justify-content: space-between; }
+    .progress-bar { height: 6px; background: var(--border); border-radius: 99px; overflow: hidden; }
+    .progress-fill { height: 100%; background: var(--accent); border-radius: 99px; transition: width .4s ease; }
+
+    /* End screens */
+    .end-screen {
+      text-align: center; padding: 1rem 0;
+      display: none; flex-direction: column; align-items: center; gap: .8rem;
+    }
+    .end-screen.active { display: flex; }
+    .end-emoji { font-size: 3rem; }
+    .end-title { font-size: 1.5rem; font-weight: 700; color: var(--text); }
+    .end-msg { color: var(--muted); font-size: .95rem; }
+    .btn-restart {
+      margin-top: .5rem;
+      background: var(--accent); color: #fff;
+      border: none; border-radius: 10px;
+      padding: .7rem 1.8rem;
+      font-size: .95rem; font-weight: 600;
+      cursor: pointer; font-family: var(--font);
+      transition: all .2s;
+    }
+    .btn-restart:hover { background: #2e5239; transform: translateY(-1px); }
+
+    /* ── Footer ── */
+    footer {
+      border-top: 1px solid var(--border);
+      text-align: center; padding: 2rem 1.5rem;
+      color: var(--muted); font-size: .85rem;
+    }
+    footer strong { color: var(--text); }
+
+    /* ── Mobile ── */
+    @media (max-width: 680px) {
+      .hero-inner { flex-direction: column; text-align: center; gap: 2rem; }
+      .hero-photo-wrap { width: 160px; height: 160px; }
+      .hero-tagline { margin: 0 auto 1.8rem; }
+      .hero-ctas { justify-content: center; }
+      .hero-badge { margin: 0 auto 1rem; }
+      .about-grid { grid-template-columns: 1fr; }
+      .nav-links { gap: 1.2rem; }
+      .game-card { padding: 1.5rem 1.2rem; }
+      .scrambled-word { letter-spacing: .1em; }
+      .slot { width: 34px; height: 38px; font-size: .95rem; }
+    }
+    @media (max-width: 400px) {
+      .nav-links { display: none; }
+      .slot { width: 28px; height: 32px; font-size: .85rem; gap: .2rem; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ── Nav ── -->
+<nav>
+  <span class="nav-logo">MG</span>
+  <div class="nav-links">
+    <a href="#hero">Home</a>
+    <a href="#about">About</a>
+    <a href="#skills">Skills</a>
+    <a href="#game">Word Game</a>
+  </div>
+</nav>
+
+<!-- ── Hero ── -->
+<section id="hero">
+  <div class="section hero-inner">
+    <div class="hero-photo-wrap">
+      <img src="GanMark_Shoot_2_125.jpg" alt="Mark Gan" />
+    </div>
+    <div class="hero-text">
+      <div class="hero-badge">Available for work</div>
+      <h1 class="hero-name">Hi, I'm Mark&nbsp;Gan.</h1>
+      <p class="hero-tagline">
+        I build things that matter — blending creativity, strategy, and technology
+        to create experiences people remember.
+      </p>
+      <div class="hero-ctas">
+        <a href="#about" class="btn btn-primary">About me</a>
+        <a href="#game" class="btn btn-outline">Play a game ↓</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<hr class="divider" />
+
+<!-- ── About ── -->
+<section id="about">
+  <div class="section">
+    <h2>About me</h2>
+    <p class="about-lead">
+      I'm a curious, driven professional who loves turning ideas into reality.
+      Whether I'm working on a complex problem, collaborating with a team, or
+      exploring something entirely new — I bring focus, energy, and a genuine
+      passion for doing things well. Based in Singapore, always thinking globally.
+    </p>
+    <div class="about-grid">
+      <div class="about-card">
+        <div class="icon">🎯</div>
+        <h3>Purpose-driven</h3>
+        <p>I care about the work I do and the impact it creates — not just the output.</p>
+      </div>
+      <div class="about-card">
+        <div class="icon">🤝</div>
+        <h3>Collaborative</h3>
+        <p>Great things rarely happen alone. I thrive in teams where ideas flow freely.</p>
+      </div>
+      <div class="about-card">
+        <div class="icon">💡</div>
+        <h3>Curious learner</h3>
+        <p>I'm always exploring new tools, ideas, and perspectives — staying ahead matters.</p>
+      </div>
+      <div class="about-card">
+        <div class="icon">🌏</div>
+        <h3>Global mindset</h3>
+        <p>Comfortable across cultures, timezones, and industries — adaptability is a strength.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<hr class="divider" />
+
+<!-- ── Skills ── -->
+<section id="skills">
+  <div class="section">
+    <h2>What I bring</h2>
+    <p>A mix of hard skills, soft skills, and a lot of enthusiasm.</p>
+    <div class="skills-wrap">
+      <span class="skill-chip">Strategic Thinking</span>
+      <span class="skill-chip">Creative Problem Solving</span>
+      <span class="skill-chip">Communication</span>
+      <span class="skill-chip">Digital Tools</span>
+      <span class="skill-chip">Project Management</span>
+      <span class="skill-chip">Team Leadership</span>
+      <span class="skill-chip">Content Creation</span>
+      <span class="skill-chip">AI & Automation</span>
+      <span class="skill-chip">Data-driven Decisions</span>
+      <span class="skill-chip">Adaptability</span>
+    </div>
+  </div>
+</section>
+
+<hr class="divider" />
+
+<!-- ── Word Scramble Game ── -->
+<section id="game">
+  <div class="section">
+    <div class="game-header">
+      <h2>Word Scramble Challenge</h2>
+      <p>Unscramble each word. Use hints if you're stuck — but they'll cost you a life!</p>
+    </div>
+
+    <div class="game-card">
+      <!-- Score bar -->
+      <div class="score-bar">
+        <div class="score-item">
+          <div class="score-label">Score</div>
+          <div class="score-val" id="score">0</div>
+        </div>
+        <div class="score-item">
+          <div class="score-label">Lives</div>
+          <div class="lives" id="lives">
+            <span class="life">💚</span>
+            <span class="life">💚</span>
+            <span class="life">💚</span>
+          </div>
+        </div>
+        <div class="score-item">
+          <div class="score-label">Round</div>
+          <div class="score-val" id="round-display">1 / 10</div>
+        </div>
+      </div>
+
+      <!-- Active game -->
+      <div id="game-active">
+        <!-- Scrambled word display -->
+        <div class="word-display">
+          <div class="scrambled-label">Unscramble this</div>
+          <div class="scrambled-word" id="scrambled-word">LOADING</div>
+        </div>
+
+        <!-- Hint row -->
+        <div class="hint-row">
+          <span class="hint-text" id="hint-text"></span>
+        </div>
+
+        <!-- Letter slots -->
+        <div class="letter-slots" id="letter-slots"></div>
+
+        <!-- Input -->
+        <div class="input-row">
+          <input
+            type="text"
+            class="guess-input"
+            id="guess-input"
+            placeholder="Type your answer…"
+            autocomplete="off"
+            autocorrect="off"
+            autocapitalize="off"
+            spellcheck="false"
+          />
+          <button class="btn-check" id="btn-check">Check</button>
+        </div>
+
+        <!-- Actions -->
+        <div class="action-row">
+          <button class="btn-hint" id="btn-hint">💡 Hint (−1 life)</button>
+          <button class="btn-skip" id="btn-skip">Skip →</button>
+        </div>
+
+        <!-- Feedback -->
+        <div class="feedback" id="feedback"></div>
+
+        <!-- Progress -->
+        <div class="progress-wrap">
+          <div class="progress-label">
+            <span>Progress</span>
+            <span id="progress-text">0 / 10</span>
+          </div>
+          <div class="progress-bar">
+            <div class="progress-fill" id="progress-fill" style="width:0%"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Win screen -->
+      <div class="end-screen" id="win-screen">
+        <div class="end-emoji">🎉</div>
+        <div class="end-title">You crushed it!</div>
+        <div class="end-msg" id="win-msg">All words solved. Impressive!</div>
+        <button class="btn-restart" id="btn-win-restart">Play again</button>
+      </div>
+
+      <!-- Game over screen -->
+      <div class="end-screen" id="gameover-screen">
+        <div class="end-emoji">😅</div>
+        <div class="end-title">Game Over!</div>
+        <div class="end-msg" id="gameover-msg">You ran out of lives. Give it another shot!</div>
+        <button class="btn-restart" id="btn-gameover-restart">Try again</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── Footer ── -->
+<footer>
+  <p>Made with care · <strong>Mark Gan</strong> · <a href="mailto:markgan1711@gmail.com">markgan1711@gmail.com</a></p>
+</footer>
+
+<!-- ── Game Script ── -->
+<script>
+(function () {
+  'use strict';
+
+  // ── Word bank: word + hint ──
+  const WORD_BANK = [
+    { word: 'CREATIVE',   hint: 'Thinking outside the box' },
+    { word: 'INSPIRE',    hint: 'To motivate others' },
+    { word: 'EXPLORE',    hint: 'Discover new things' },
+    { word: 'ACHIEVE',    hint: 'Reach your goal' },
+    { word: 'DIGITAL',    hint: 'Of the electronic kind' },
+    { word: 'PASSION',    hint: 'Strong enthusiasm' },
+    { word: 'NETWORK',    hint: 'Connected web of people or systems' },
+    { word: 'JOURNEY',    hint: 'A long, meaningful trip' },
+    { word: 'CONNECT',    hint: 'Bring together' },
+    { word: 'INNOVATE',   hint: 'Introduce something new' },
+    { word: 'CURIOUS',    hint: 'Eager to learn' },
+    { word: 'STRATEGY',   hint: 'A plan of action' },
+    { word: 'COLLABORATE',hint: 'Work together' },
+    { word: 'MINDSET',    hint: 'Your way of thinking' },
+    { word: 'RESILIENT',  hint: 'Bouncing back from setbacks' },
+  ];
+
+  const TOTAL_ROUNDS = 10;
+  const MAX_LIVES = 3;
+
+  // ── State ──
+  let deck = [], roundIdx = 0, score = 0, lives = MAX_LIVES;
+  let currentWord = '', hintUsed = false, answered = false;
+
+  // ── DOM refs ──
+  const elScrambled    = document.getElementById('scrambled-word');
+  const elSlots        = document.getElementById('letter-slots');
+  const elInput        = document.getElementById('guess-input');
+  const elCheck        = document.getElementById('btn-check');
+  const elHint         = document.getElementById('btn-hint');
+  const elSkip         = document.getElementById('btn-skip');
+  const elFeedback     = document.getElementById('feedback');
+  const elScore        = document.getElementById('score');
+  const elLives        = document.getElementById('lives');
+  const elRound        = document.getElementById('round-display');
+  const elHintText     = document.getElementById('hint-text');
+  const elProgressFill = document.getElementById('progress-fill');
+  const elProgressText = document.getElementById('progress-text');
+  const elGameActive   = document.getElementById('game-active');
+  const elWinScreen    = document.getElementById('win-screen');
+  const elWinMsg       = document.getElementById('win-msg');
+  const elGameOver     = document.getElementById('gameover-screen');
+  const elGameOverMsg  = document.getElementById('gameover-msg');
+
+  // ── Helpers ──
+  function shuffle(arr) {
+    const a = [...arr];
+    for (let i = a.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [a[i], a[j]] = [a[j], a[i]];
+    }
+    return a;
+  }
+
+  function scramble(word) {
+    // Guarantee scrambled ≠ original
+    if (word.length <= 2) return word.split('').reverse().join('');
+    let result;
+    let attempts = 0;
+    do {
+      result = shuffle(word.split('')).join('');
+      attempts++;
+    } while (result === word && attempts < 20);
+    return result;
+  }
+
+  function buildDeck() {
+    return shuffle(WORD_BANK).slice(0, TOTAL_ROUNDS);
+  }
+
+  function updateLivesUI() {
+    const hearts = elLives.querySelectorAll('.life');
+    hearts.forEach((h, i) => {
+      h.classList.toggle('lost', i >= lives);
+    });
+  }
+
+  function updateProgress() {
+    const pct = (roundIdx / TOTAL_ROUNDS) * 100;
+    elProgressFill.style.width = pct + '%';
+    elProgressText.textContent = roundIdx + ' / ' + TOTAL_ROUNDS;
+    elRound.textContent = (Math.min(roundIdx + 1, TOTAL_ROUNDS)) + ' / ' + TOTAL_ROUNDS;
+  }
+
+  function buildSlots(word) {
+    elSlots.innerHTML = '';
+    for (let i = 0; i < word.length; i++) {
+      const s = document.createElement('div');
+      s.className = 'slot';
+      s.dataset.idx = i;
+      elSlots.appendChild(s);
+    }
+  }
+
+  function updateSlots(typed) {
+    const slots = elSlots.querySelectorAll('.slot');
+    slots.forEach((s, i) => {
+      const ch = (typed[i] || '').toUpperCase();
+      s.textContent = ch;
+      s.classList.toggle('filled', ch.length > 0);
+      s.classList.remove('correct', 'wrong');
+    });
+  }
+
+  function flashSlots(isCorrect) {
+    const slots = elSlots.querySelectorAll('.slot');
+    const cls = isCorrect ? 'correct' : 'wrong';
+    slots.forEach(s => { s.classList.remove('filled'); s.classList.add(cls); });
+    setTimeout(() => {
+      slots.forEach(s => s.classList.remove('correct', 'wrong', 'filled'));
+    }, 700);
+  }
+
+  function setFeedback(msg, type) {
+    elFeedback.textContent = msg;
+    elFeedback.className = 'feedback ' + (type || '');
+  }
+
+  function loadRound() {
+    if (roundIdx >= TOTAL_ROUNDS) { endWin(); return; }
+    const entry = deck[roundIdx];
+    currentWord = entry.word;
+    hintUsed = false;
+    answered = false;
+
+    const scrambled = scramble(currentWord);
+    elScrambled.textContent = scrambled;
+    buildSlots(currentWord);
+    elInput.value = '';
+    elHintText.textContent = '';
+    elHint.disabled = false;
+    setFeedback('');
+    updateProgress();
+    elInput.focus();
+  }
+
+  function checkAnswer() {
+    if (answered) return;
+    const guess = elInput.value.trim().toUpperCase();
+    if (!guess) {
+      setFeedback('Type something first!', '');
+      elInput.focus();
+      return;
+    }
+
+    if (guess === currentWord) {
+      answered = true;
+      flashSlots(true);
+      const pts = hintUsed ? 5 : 10;
+      score += pts;
+      elScore.textContent = score;
+      roundIdx++;
+      setFeedback('✓ Correct! +' + pts + ' pts', 'correct');
+      updateProgress();
+      setTimeout(loadRound, 900);
+    } else {
+      lives--;
+      updateLivesUI();
+      updateSlots(guess);
+      flashSlots(false);
+
+      if (lives <= 0) {
+        setFeedback('The word was: ' + currentWord, 'wrong');
+        setTimeout(endGameOver, 1000);
+      } else {
+        setFeedback('Not quite — try again!', 'wrong');
+        elInput.value = '';
+        elInput.focus();
+      }
+    }
+  }
+
+  function useHint() {
+    if (hintUsed || answered) return;
+    if (lives <= 1) {
+      setFeedback('Not enough lives for a hint!', 'wrong');
+      return;
+    }
+    hintUsed = true;
+    lives--;
+    updateLivesUI();
+    elHint.disabled = true;
+    elHintText.textContent = '💡 ' + deck[roundIdx].hint;
+    setFeedback('Hint revealed — −1 life', '');
+  }
+
+  function skipRound() {
+    if (answered) return;
+    setFeedback('Skipped. The word was: ' + currentWord, 'wrong');
+    roundIdx++;
+    updateProgress();
+    setTimeout(loadRound, 1000);
+  }
+
+  function endWin() {
+    elGameActive.style.display = 'none';
+    elWinScreen.classList.add('active');
+    elWinMsg.textContent = 'Score: ' + score + ' / ' + (TOTAL_ROUNDS * 10) + '. Well played, Mark!';
+  }
+
+  function endGameOver() {
+    elGameActive.style.display = 'none';
+    elGameOver.classList.add('active');
+    elGameOverMsg.textContent = 'You scored ' + score + ' pts in ' + roundIdx + ' rounds. Try again?';
+  }
+
+  function restartGame() {
+    deck = buildDeck();
+    roundIdx = 0; score = 0; lives = MAX_LIVES;
+    elScore.textContent = '0';
+    updateLivesUI();
+    elGameActive.style.display = '';
+    elWinScreen.classList.remove('active');
+    elGameOver.classList.remove('active');
+    loadRound();
+  }
+
+  // ── Events ──
+  elCheck.addEventListener('click', checkAnswer);
+  elHint.addEventListener('click', useHint);
+  elSkip.addEventListener('click', skipRound);
+
+  elInput.addEventListener('keydown', function (e) {
+    if (e.key === 'Enter') { e.preventDefault(); checkAnswer(); }
+  });
+
+  elInput.addEventListener('input', function () {
+    updateSlots(this.value);
+  });
+
+  document.getElementById('btn-win-restart').addEventListener('click', restartGame);
+  document.getElementById('btn-gameover-restart').addEventListener('click', restartGame);
+
+  // ── Touch / mobile: focus fix ──
+  elCheck.addEventListener('touchend', function (e) {
+    e.preventDefault(); checkAnswer();
+  });
+  elHint.addEventListener('touchend', function (e) {
+    e.preventDefault(); useHint();
+  });
+  elSkip.addEventListener('touchend', function (e) {
+    e.preventDefault(); skipRound();
+  });
+
+  // ── Init ──
+  restartGame();
+})();
+</script>
+</body>
+</html>
